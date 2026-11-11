@@ -1,1 +1,26 @@
 
+<!DOCTYPE html>
+<html>
+<head>
+  <title>FCKeditor Connector Test</title>
+</head>
+<body>
+  <h2>Connector Test</h2>
+  <p>GitHub Pages Static Test</p>
+
+  <button onclick="testConnector()">
+    Test Connector
+  </button>
+
+  <pre id="result"></pre>
+
+  <script>
+    function testConnector() {
+      document.getElementById("result").textContent =
+        "GitHub Pages is working.\n" +
+        "PHP Connector is not supported here.\n" +
+        "No server files were accessed.";
+    }
+  </script>
+</body>
+</html>
