@@ -1,1 +1,119 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FCKeditor Connector Tester</title>
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #f3f4f6;
+  padding: 20px;
+  color: #222;
+}
+.container {
+  max-width: 750px;
+  margin: auto;
+  background: white;
+  padding: 22px;
+  border-radius: 10px;
+}
+h2 { margin-top: 0; }
+textarea {
+  width: 100%;
+  height: 100px;
+  box-sizing: border-box;
+  padding: 12px;
+}
+button {
+  padding: 11px 18px;
+  margin-top: 10px;
+  cursor: pointer;
+  background: #222;
+  color: white;
+  border: 0;
+  border-radius: 5px;
+}
+pre {
+  background: #eee;
+  padding: 15px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.result {
+  margin-top: 15px;
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<h2>FCKeditor Connector Tester</h2>
+<p>GitHub Pages Static Testing Tool</p>
+
+<label>Paste URL:</label>
+<textarea id="url" placeholder="Paste your test URL here"></textarea>
+
+<br>
+<button onclick="analyze()">Analyze URL</button>
+
+<div class="result">
+<h3>Connector Information</h3>
+<pre id="output">Waiting for URL...</pre>
+</div>
+
+<div class="result">
+<h3>Mock Connector Response</h3>
+<pre id="mock">No test performed.</pre>
+</div>
+
+</div>
+
+<script>
+function analyze() {
+  const input = document.getElementById("url").value.trim();
+  const output = document.getElementById("output");
+  const mock = document.getElementById("mock");
+
+  try {
+    const url = new URL(input);
+
+    const params = new URLSearchParams(url.search);
+
+    const connector = params.get("CONNECTOR");
+    const type = params.get("Type");
+    const folders = params.get("GetFoldersAndFiles");
+
+    const data = {
+      hostname: url.hostname,
+      pathname: url.pathname,
+      protocol: url.protocol,
+      Type: type,
+      CONNECTOR: connector,
+      GetFoldersAndFiles: folders,
+      allParameters: Object.fromEntries(params.entries())
+    };
+
+    output.textContent = JSON.stringify(data, null, 2);
+
+    mock.textContent = JSON.stringify({
+      status: "MOCK_SUCCESS",
+      message: "Static simulation only",
+      folders: ["folder1", "folder2"],
+      files: ["example.txt", "image.jpg"],
+      serverAccess: false,
+      uploadEnabled: false
+    }, null, 2);
+
+  } catch (error) {
+    output.textContent = "Invalid URL: " + error.message;
+    mock.textContent = "No simulation available.";
+  }
+}
+</script>
+
+</body>
+</html>
